@@ -22,8 +22,8 @@ public class Main : MonoBehaviour
     //range : 10 -> 10
     // sun edge at -8.5
     public double leftScreen = -7;
-    public double rightScreen = 8.5;
-    public double sunEdge = -8;
+    public double rightScreen = 9;
+    public double sunEdge = -7.5;
 
     //sum of sizes of active planets
     double sum = 122.024; 
@@ -81,9 +81,7 @@ public class Main : MonoBehaviour
         int i = 0;
         double prevR = 0.0;
         double prevX = 0.0;
-        double cameraRad = 10.0;
         double constPadding = 4.0 / ((double)activeObjects.Count-1.0);
-        double extraPad =0;
         double drawSize = (Math.Abs(leftScreen) + rightScreen) - 4;
         foreach(GameObject g in activeObjects){
             int index = activePlanetIndices[i];
@@ -113,7 +111,7 @@ public class Main : MonoBehaviour
                 }
 
                 //swwapped to orthographic projections, fizes perspective issues requiring semi circle
-
+                // with orthographic projection, just size it to scale and done
 
                 g.transform.position = new Vector3( (float) (newX + leftScreen) , 5, (float) 0);
                 g.transform.localScale = new Vector3((float)scaleDiameter,(float)scaleDiameter,(float)scaleDiameter);

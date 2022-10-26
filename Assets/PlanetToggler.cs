@@ -18,7 +18,7 @@ public class PlanetToggler : MonoBehaviour
     void Update()
     {
         if( shadows == 1){
-            if(transform.localScale.x == 0.1f){
+            if(transform.localScale.x == 0.6f){
                 gameObject.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 shadows=0;
             }
@@ -30,7 +30,7 @@ public class PlanetToggler : MonoBehaviour
     }
 
     void OnMouseOver(){
-        if(Input.GetMouseButtonDown(0) && planetNumber != -1){
+        if(Input.GetMouseButtonDown(0) && planetNumber != -1 && transform.localScale.x == 0.6f ){
             mainScript.updateActive(planetNumber);
         }
     }
