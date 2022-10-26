@@ -32,8 +32,16 @@ public class PlanetToggler : MonoBehaviour
     void OnMouseOver(){
         if(Input.GetMouseButtonDown(0) && planetNumber != -1 && transform.localScale.x == 0.6f ){
             mainScript.updateActive(planetNumber);
+        } 
+        else if(Input.GetMouseButtonDown(0)&& planetNumber != -1){
+            //Clicked main planet, move to planet screen!
+            mainScript.planetView(planetNumber);
+
         }
+
+
     }
+
 
 
 }

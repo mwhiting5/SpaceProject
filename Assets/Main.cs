@@ -16,6 +16,7 @@ public class Main : MonoBehaviour
     // used for toggling on and off planets: index of planets / actual planet objects
     public List<int> activePlanetIndices;
     public List<GameObject> activeObjects;
+    public List<GameObject> uiPlanets;
     
     public int activeObjCount;
 
@@ -37,6 +38,9 @@ public class Main : MonoBehaviour
     public GameObject UI;
     public GameObject textPrefab;
 
+    //mode 1:overview , 2: planet
+    int mode = 1;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,16 +60,19 @@ public class Main : MonoBehaviour
             GameObject newGO = Instantiate(planetPrefabs[j]);
             newGO.transform.position = new Vector3( (float) ( -2.8 + ((double)j)*0.7 ) , 0.45f, -8.0f);
             newGO.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
+            uiPlanets.Add(newGO);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(activePlanetIndices.Count != activeObjCount && activeObjCount !=1){
-            drawPlanets();
+        if(mode == 1){
+            if(activePlanetIndices.Count != activeObjCount && activeObjCount !=1){
+                drawPlanets();
 
-            displayNames();
+                displayNames();
+            }
         }
     }
 
@@ -179,6 +186,42 @@ public class Main : MonoBehaviour
             activeObjects.Insert(activePlanetIndices.IndexOf(n), Instantiate(planetPrefabs[n]));
             sum+=planetRadius[n];
         }
+
+    }
+
+    public void planetView(int planetNumber){
+        mode = 2;
+        //destroy all planet objects to prepare for planet scene
+        for(int i=activePlanetIndices.Count -1; i >= 0; i--){
+            updateActive(activePlanetIndices[i]);
+        }
+        foreach(GameObject g in uiPlanets){
+            Destroy(g);
+        }
+        displayNames();
+
+
+        //draw planet on left half of screen 
+        GameObject currPlanet = Instantiate(planetPrefabs[planetNumber]);
+        currPlanet.transform.position = new Vector3( -4.5f, 5f, 0f);
+        currPlanet.transform.localScale = Vector3.one * 8.0f;
+
+        // draw planet UI
+        // spawn new text on UI
+        // planet name in larger space
+        GameObject planetName = Instantiate(textPrefab);
+        TMPro.TextMeshProUGUI t = planetName.GetComponent<TextMeshProUGUI>();
+        t.SetText(planetNames[planetNumber]);
+        planetName.transform.SetParent(UI.transform);
+        planetName.transform.localPosition = new Vector3(160f, 1f, 0f);
+        t.fontSize = 1.75f;
+        t.alignment = TextAlignmentOptions.TopRight;
+
+        // now stats to display:
+
+        //subtext size: 0.4
+        //subtext localpos = -65
+
 
     }
 }
