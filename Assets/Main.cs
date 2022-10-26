@@ -21,9 +21,9 @@ public class Main : MonoBehaviour
 
     //range : 10 -> 10
     // sun edge at -8.5
-    public double leftScreen = -8.5;
-    public double rightScreen = 10;
-    public double sunEdge = -9;
+    public double leftScreen = -7;
+    public double rightScreen = 8.5;
+    public double sunEdge = -8;
 
     //sum of sizes of active planets
     double sum = 122.024; 
@@ -47,12 +47,6 @@ public class Main : MonoBehaviour
             activeObjects.Add(newGO);
             i++;
         }
-        // sum = sum - 43.441 - 36.184 - 15.759 - 15.299;
-        // //sum = 1.516;
-        // for( int j = 0; j < 4; j++){
-        //     activeObjects.RemoveAt(5);
-        //     activePlanetIndices.RemoveAt(5);
-        // }
         drawPlanets();
 
         displayNames();
@@ -60,8 +54,8 @@ public class Main : MonoBehaviour
         //small UI planets for spawning 
         for(int j = 1; j < 9; j++){
             GameObject newGO = Instantiate(planetPrefabs[j]);
-            newGO.transform.position = new Vector3( (float) ( 0.75 + ((double)j)*0.15 ) , 4f, -8.0f);
-            newGO.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
+            newGO.transform.position = new Vector3( (float) ( -2.8 + ((double)j)*0.7 ) , 0.45f, -8.0f);
+            newGO.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
         }
     }
 
@@ -86,32 +80,42 @@ public class Main : MonoBehaviour
 
         int i = 0;
         double prevR = 0.0;
-        double prevX = leftScreen;
-        double padding = 2 / (activeObjects.Count-1);
+        double prevX = 0.0;
+        double cameraRad = 10.0;
+        double constPadding = 4.0 / ((double)activeObjects.Count-1.0);
+        double extraPad =0;
+        double drawSize = (Math.Abs(leftScreen) + rightScreen) - 4;
         foreach(GameObject g in activeObjects){
             int index = activePlanetIndices[i];
             //scale / transform to default position 
             if( i==0 ){
-                double scaleDiameter = (planetRadius[index]/sum) * (13);
-                g.transform.position = new Vector3( (float) (sunEdge-scaleDiameter/2), 5, -10f);
+                double scaleDiameter = (planetRadius[index]/sum) * (drawSize);
+                //one planet case
+                if(activeObjCount == 2){
+                    scaleDiameter = (planetRadius[index] / sum) * 8.0;
+                }
+                g.transform.position = new Vector3( (float) (sunEdge-(scaleDiameter/2.0)), 5, (float) (scaleDiameter/2));
                 g.transform.localScale = new Vector3((float)scaleDiameter,(float)scaleDiameter,(float)scaleDiameter);
             }
             else{
-                double scaleDiameter = (planetRadius[index]/sum) * (13);
-                // one planet left, dont show too large
-                if (scaleDiameter>9 && activePlanetIndices.Count==2) scaleDiameter = 9;
+                double scaleDiameter = (planetRadius[index]/sum) * (drawSize);
+
                 // new x coord based on prev planets location and size, as well as current size
-                // last term fixes masking issue with larger planets intersecting eachother 
-                // (doesnt do much for small) 
-                double newX = prevX + prevR + scaleDiameter/2 + padding;
-                if(i>1){
-                    newX += (prevR + scaleDiameter/2)/2.5;
+                double newX = prevX + prevR + scaleDiameter/2 + constPadding;
+                if(i==1){
+                    newX -=constPadding ;
                 } 
 
-                //calculate angle based on percentage of centerX and total placement area, then place on circle surrounding camera
-                double p = (newX+9) / (Math.Abs(leftScreen) + rightScreen);
-                double angle = Math.PI*((91-p*91) +44.25)/180;
-                g.transform.position = new Vector3( (float) (10*Math.Cos(angle))  , 5, (float) (10*Math.Sin(angle) - 10.0f));
+                // only one planet
+                if(activeObjects.Count == 2){
+                    newX = 2.0 - leftScreen;
+                    scaleDiameter = 8;
+                }
+
+                //swwapped to orthographic projections, fizes perspective issues requiring semi circle
+
+
+                g.transform.position = new Vector3( (float) (newX + leftScreen) , 5, (float) 0);
                 g.transform.localScale = new Vector3((float)scaleDiameter,(float)scaleDiameter,(float)scaleDiameter);
                 
                 prevX = newX;

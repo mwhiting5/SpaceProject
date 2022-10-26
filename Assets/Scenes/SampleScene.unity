@@ -184,9 +184,10 @@ MonoBehaviour:
   - Neptune
   activePlanetIndices: 
   activeObjects: []
-  leftScreen: -8.5
-  rightScreen: 10
-  sunEdge: -9
+  activeObjCount: 0
+  leftScreen: -7
+  rightScreen: 9
+  sunEdge: -7.5
   UI: {fileID: 1172894636}
   textPrefab: {fileID: 4675175205528037454, guid: 48a17574146abb34cbc24fcb24070600, type: 3}
 --- !u!4 &523927674
@@ -416,9 +417,9 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 2500
   field of view: 60
-  orthographic: 0
+  orthographic: 1
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
@@ -640,8 +641,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1529135610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.1, y: 7.6, z: 101.6}
-  m_LocalScale: {x: 1000, y: 1000, z: 1}
+  m_LocalPosition: {x: 5.1, y: 7.6, z: 2000}
+  m_LocalScale: {x: 200, y: 200, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
