@@ -38,6 +38,13 @@ public class Main : MonoBehaviour
     public GameObject UI;
     public GameObject textPrefab;
 
+    public GameObject backButtonPreFab; 
+
+    //planet overview stuff
+    GameObject focusedPlanet;
+    GameObject planetNameText;
+    GameObject backButton;
+
     //mode 1:overview , 2: planet
     int mode = 1;
 
@@ -56,12 +63,7 @@ public class Main : MonoBehaviour
         displayNames();
 
         //small UI planets for spawning 
-        for(int j = 1; j < 9; j++){
-            GameObject newGO = Instantiate(planetPrefabs[j]);
-            newGO.transform.position = new Vector3( (float) ( -2.8 + ((double)j)*0.7 ) , 0.45f, -8.0f);
-            newGO.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
-            uiPlanets.Add(newGO);
-        }
+        drawUIPlanets();
     }
 
     // Update is called once per frame
@@ -129,6 +131,15 @@ public class Main : MonoBehaviour
             i++;
         }
         activeObjCount = i;
+    }
+
+    void drawUIPlanets(){
+        for(int j = 1; j < 9; j++){
+            GameObject newGO = Instantiate(planetPrefabs[j]);
+            newGO.transform.position = new Vector3( (float) ( -2.8 + ((double)j)*0.7 ) , 0.45f, -8.0f);
+            newGO.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
+            uiPlanets.Add(newGO);
+        }
     }
 
     // displays names of current active planets under current locations
@@ -202,18 +213,22 @@ public class Main : MonoBehaviour
 
 
         //draw planet on left half of screen 
-        GameObject currPlanet = Instantiate(planetPrefabs[planetNumber]);
-        currPlanet.transform.position = new Vector3( -4.5f, 5f, 0f);
-        currPlanet.transform.localScale = Vector3.one * 8.0f;
+        focusedPlanet = Instantiate(planetPrefabs[planetNumber]);
+        focusedPlanet.transform.position = new Vector3( -4.5f, 5f, 0f);
+        focusedPlanet.transform.localScale = Vector3.one * 8.0f;
+
+        //draw back button
+        backButton = Instantiate(backButtonPreFab);
+        backButton.transform.position = new Vector3(-8f,9f,0); 
 
         // draw planet UI
         // spawn new text on UI
         // planet name in larger space
-        GameObject planetName = Instantiate(textPrefab);
-        TMPro.TextMeshProUGUI t = planetName.GetComponent<TextMeshProUGUI>();
+        planetNameText = Instantiate(textPrefab);
+        TMPro.TextMeshProUGUI t = planetNameText.GetComponent<TextMeshProUGUI>();
         t.SetText(planetNames[planetNumber]);
-        planetName.transform.SetParent(UI.transform);
-        planetName.transform.localPosition = new Vector3(160f, 1f, 0f);
+        planetNameText.transform.SetParent(UI.transform);
+        planetNameText.transform.localPosition = new Vector3(160f, 1f, 0f);
         t.fontSize = 1.75f;
         t.alignment = TextAlignmentOptions.TopRight;
 
@@ -223,5 +238,21 @@ public class Main : MonoBehaviour
         //subtext localpos = -65
 
 
+    }
+
+    public void returnToOverview(){
+
+        Destroy(planetNameText);
+        Destroy(focusedPlanet);
+        Destroy(backButton);
+
+        for(int i = 0; i < 9; i++){
+            updateActive(i);
+        }
+
+        mode = 1; 
+        drawPlanets();
+        displayNames();
+        drawUIPlanets();
     }
 }
