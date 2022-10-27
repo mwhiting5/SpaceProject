@@ -2,6 +2,8 @@
 
 Basic Unity project for playing around with planet sizes.
 
+https://mwhiting5.github.io/SpaceProject/
+
 Controls: 
 Click smaller planets to toggle planets on/off.
 
